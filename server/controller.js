@@ -223,21 +223,26 @@ module.exports = {
             getCountries: (req, res) => {
                 sequelize.query(`select * from countries`)
                 .then(dbRes => res.status(200).send(dbRes[0]))
-                .catch(err => console.log(err))
+                .catch(err => console.log('error selecting country', err))
             },
             createCity: (req, res) => {
-                sequelize.query()
+                const { name, rating, countryId } = req.body
+                if (!name || !rating || !countryId) {
+                    return res.status(err).send({error: 'missing required information'})
+                }
+                sequelize.query(`INSERT INTO cities (name, rating, country_id)`)
                 .then(dbRes => res.status(200).send(dbRes[0]))
-                .catch(err => console.log(err))
+                .catch(err => console.log('error creating city', err))
             },
             getCities: (req, res) => {
-                sequelize.query()
+                sequelize.query(`SELECT cities_id AS CITY, countries_id AS country `)
                 .then(dbRes => res.status(200).send(dbRes[0]))
-                .catch(err => console.log(err))
+                .catch(err => console.log('error getting city', err))
             },
             deleteCity: (req, res) => {
-                sequelize.query()
+                const { id } = require.params;
+                sequelize.query(`delete FROM cities WHERE city_id = ${id}`)
                 .then(dbRes => res.status(200).send(dbRes[0]))
-                .catch(err => console.log(err))
+                .catch(err => console.log('error deleting the city', err))
             }
 }
